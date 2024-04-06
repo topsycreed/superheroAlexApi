@@ -63,9 +63,12 @@ class BaseTests {
     @Test
     void postControllerTest() {
         SuperheroController controller = new SuperheroController();
+//        System.out.println(System.getProperty("env"));
+//        System.setProperty("env", "dev");
+//        System.out.println(System.getProperty("env"));
         Response response = controller.addHero();
         int status = response.getStatusCode();
-        Superhero superhero = response.as(Superhero.class);
+        Superhero superhero = controller.parseHero(response);
         Assertions.assertEquals(200, status);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(superhero.getPhone())

@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "io.qameta.allure" version "2.11.2"
 }
 
 group = 'org.marvel'
@@ -24,8 +25,26 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok:1.18.32'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+    testImplementation 'io.qameta.allure:allure-junit5:2.26.0'
+    testImplementation 'io.qameta.allure:allure-rest-assured:2.26.0'
+    testImplementation 'org.aeonbits.owner:owner:1.0.12'
 }
 
 test {
     useJUnitPlatform()
+    //systemProperty('env', 'test')
+    systemProperties(System.getProperties())
+}
+
+tasks.register('smokeTest', Test) {
+    useJUnitPlatform() {
+        includeTags 'smoke'
+    }
+}
+
+tasks.register('noDefectsTest', Test) {
+    useJUnitPlatform() {
+        excludeTags 'Failed', 'Flaky'
+    }
 }
